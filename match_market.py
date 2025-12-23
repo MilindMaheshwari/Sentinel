@@ -1,82 +1,87 @@
 import requests
 import re
+from rapidfuzz import fuzz
 
-# Base URLs
-POLY_WEB_URL = "https://polymarket.com/event"
-POLY_GAMMA_SEARCH = "https://gamma-api.polymarket.com/public-search"
+# --- GLOBAL CONFIGURATION ---
+POLY_WEB_BASE = "https://polymarket.com/event"
+POLY_SEARCH_API = "https://gamma-api.polymarket.com/public-search"
 POLY_SLUG_API = "https://gamma-api.polymarket.com/markets/slug"
 
-def build_nfl_slug_from_kalshi(k_ticker):
-    """
-    Translates Kalshi NFL ticker to Polymarket Slug format.
-    Example: kxnflgame-25dec25dalwas -> nfl-dal-was-2025-12-25
-    """
-    # Pattern to catch: Day(2) Month(3) Year(2) Away(3) Home(3)
-    match = re.search(r'(\d{2})([a-z]{3})(\d{2})([a-z]{3})([a-z]{3})', k_ticker.lower())
-    if not match:
-        return None
-        
-    day, month_str, year_short, away, home = match.groups()
-    months = {"jan":"01","feb":"02","mar":"03","apr":"04","may":"05","jun":"06",
-              "jul":"07","aug":"08","sep":"09","oct":"10","nov":"11","dec":"12"}
-    
-    date_iso = f"20{year_short}-{months.get(month_str, '01')}-{day}"
-    return f"nfl-{away}-{home}-{date_iso}"
-
-def get_poly_match(k_market):
-    k_title = k_market.get('title', "")
-    k_ticker = k_market.get('ticker', "")
-
-    # 1. Try exact NFL slug match (Deterministic)
-    if "nfl" in k_ticker.lower():
-        slug = build_nfl_slug_from_kalshi(k_ticker)
-        resp = requests.get(f"{POLY_SLUG_API}/{slug}")
-        if resp.status_code == 200:
-            return resp.json()
-
-    # 2. Keyword search fallback (Discovery)
-    # Strip fluff words that confuse search engines
-    fluff = r'\b(will|the|win|professional|football|game|against|on|at|by|\?)\b'
-    clean_q = re.sub(fluff, '', k_title, flags=re.IGNORECASE).strip()
-    clean_q = " ".join(clean_q.split())
-    
-    resp = requests.get(POLY_GAMMA_SEARCH, params={'q': clean_q})
-    results = resp.json()
-
-    if isinstance(results, list) and len(results) > 0:
-        event = results[0]
-        # Polymarket events can contain multiple markets (strikes). 
-        # For a winner market, we return the first one.
-        markets = event.get('markets', [])
-        if markets:
-            # We attach the event slug to the market object for link generation
-            markets[0]['event_slug'] = event.get('slug')
-            return markets[0]
-    
-    return None
-
-def display_match_info(k_market, p_match):
-    print("=" * 60)
-    print(f"SOURCE (KALSHI): {k_market['title']}")
-    
-    if p_match:
-        # Polymarket uses the event slug for the URL path
-        slug = p_match.get('event_slug') or p_match.get('slug')
-        link = f"{POLY_WEB_URL}/{slug}"
-        
-        print("\n✅ POLYMARKET MATCH FOUND")
-        print(f"{'Question:':<12} {p_match.get('question')}")
-        print(f"{'Slug:':<12} {p_match.get('slug')}")
-        print(f"{'Link:':<12} {link}")
-    else:
-        print("\n❌ NO POLYMARKET MATCH FOUND")
-    print("=" * 60)
-
-# --- Test Case ---
-test_kalshi_market = {
-    "ticker": "kxnflgame-25dec25dalwas",
-    "title": "Will the Dallas Cowboys win the professional football game against the Washington Commanders on December 25, 2025?"
+# Automates League Translation
+# Key: The text to look for in Kalshi Ticker
+# Value: The prefix Polymarket uses in its Slugs
+LEAGUE_CONFIG = {
+    "nfl": "nfl",
+    "nba": "nba",
+    "nhl": "nhl",
+    "mlb": "mlb"
 }
 
-match = get_poly_match(test_kalshi_market)
-display_match_info(test_kalshi_market, match)
+class MarketMatcher:
+    def __init__(self):
+        self.months = {
+            "jan":"01","feb":"02","mar":"03","apr":"04","may":"05","jun":"06",
+            "jul":"07","aug":"08","sep":"09","oct":"10","nov":"11","dec":"12"
+        }
+
+    def _exact_match_sports_slug(self, ticker):
+        """Automates slug creation by detecting league and parsing date/teams."""
+        ticker = ticker.lower()
+        
+        # 1. Automate League Detection
+        league_prefix = next((v for k, v in LEAGUE_CONFIG.items() if k in ticker), None)
+        if not league_prefix:       
+            return None
+
+        # 2. Corrected Pattern: Year(2)Month(3)Day(2)Away(3)Home(3)
+        # Ticker: 25dec23bknphi -> yr=25, mon=dec, day=23
+        match = re.search(r'(\d{2})([a-z]{3})(\d{2})([a-z]{3})([a-z]{3})', ticker)
+        
+        if match:
+            # Re-mapping the groups to the correct order
+            yr, mon, day, away, home = match.groups()
+            
+            # Format to ISO: 2025-12-23
+            iso_date = f"20{yr}-{self.months.get(mon, '01')}-{day}"
+            
+            # Generate slug: nba-bkn-phi-2025-12-23
+            return f"{league_prefix}-{away}-{home}-{iso_date}"
+            
+        return None
+        
+
+    def find_polymarket_match(self, kalshi_market):
+        """Main entry point: Orchestrates deterministic check vs. fuzzy search."""
+        ticker = kalshi_market.get('ticker', '')
+        title = kalshi_market.get('title', '')
+
+        # STEP 1: Attempt Automated Slug Match (Fast/Accurate)
+        generated_slug = self._exact_match_sports_slug(ticker)
+        if generated_slug:
+            print(f"DEBUG: Testing predicted slug -> {generated_slug}")
+            resp = requests.get(f"{POLY_SLUG_API}/{generated_slug}")
+            if resp.status_code == 200:
+                data = resp.json()
+                # Ensure we have the event slug for the URL
+                data['final_url'] = f"{POLY_WEB_BASE}/{data.get('slug')}"
+                return data
+
+        return None
+    
+# --- RUNNING THE MATCHER ---
+matcher = MarketMatcher()
+
+# Example: NBA Test (Automatic Mapping)
+nba_test = {
+    "ticker": "KXNBAGAME-25DEC23BKNPHI",
+    "title": "Will the Philadelphia 76ers win their game against the Brooklyn Nets on Dec 23, 2025?"
+}
+
+match = matcher.find_polymarket_match(nba_test)
+
+if match:
+    print(f"\n✅ SUCCESS: Found {match.get('question')}")
+    print(f"🔗 Link: {match.get('final_url')}")
+else:
+    print("\n❌ FAILED: No match found.")
+
