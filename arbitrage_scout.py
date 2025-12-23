@@ -3,6 +3,9 @@ from kalshi_fetcher import get_open_markets_for_series
 from match_market import MarketMatcher
 import requests
 
+with open('dictionaries/kalshi_poly_dict.json', 'r') as f:
+    kalshi_poly_dict = json.load(f)
+
 SERIES_TICKERS = ["KXNBAGAME", "KXNFLGAME", "KXNHLGAME", "KXMLBGAME"]
 KALSHI_SIDES = ["yes", "no"]
 
@@ -19,45 +22,58 @@ def fetch_polymarket_prices(slug):
         return None, None
 
 def detect_arbitrage(kalshi_market, polymarket_slug, outcomes, poly_prices):
-    # Kalshi fields
-    kalshi_prices = {}
-    for side in KALSHI_SIDES:
-        price = kalshi_market.get(f"{side}_ask_dollars")
-        try:
-            kalshi_prices[side] = float(price) if price is not None else None
-        except:
-            kalshi_prices[side] = None
+    """
+    kalshi_market: The dict for a specific ticker (e.g., ...DETSAC-DET)
+    outcomes: List of teams from Polymarket (e.g., ["Pistons", "Kings"])
+    poly_prices: List of prices (e.g., [0.45, 0.55])
+    """
+    kalshi_ticker = kalshi_market.get("ticker", "")
+    league = kalshi_ticker[2:5]
+    # Extract the team code from the end of the Kalshi ticker (e.g., 'DET')
+    kalshi_team_code = kalshi_ticker.split('-')[-1] 
+
+    kalshi_yes = float(kalshi_market.get("yes_ask_dollars") or 0)
+    kalshi_no = float(kalshi_market.get("no_ask_dollars") or 0)
 
     arbitrage_cases = []
-    # YES/NO mapping: outcome 0 is "away", outcome 1 is "home"
-    for i, outcome in enumerate(outcomes):
-        poly_yes = poly_prices[i] if i < len(poly_prices) else None
-        poly_no = 1 - poly_yes if poly_yes is not None else None
-        # Case 1: Buy YES on Kalshi, NO on Polymarket (i-th outcome)
-        if kalshi_prices["yes"] is not None and poly_no is not None:
-            total_spent = kalshi_prices["yes"] + poly_no
+
+    for i, outcome_name in enumerate(outcomes):
+        # IMPORTANT: Use your matcher or a simple helper to see if 
+        # 'DET' (Kalshi) matches 'Pistons' (Polymarket)
+        if not is_same_team(kalshi_team_code, outcome_name, league):
+            continue
+
+        # If we are here, we are looking at the SAME team on both platforms
+        poly_yes = poly_prices[i]
+        poly_no = 1 - poly_yes
+
+        # Case 1: Buy Team A 'YES' on Kalshi, 'NO' (against Team A) on Polymarket
+        if kalshi_yes > 0:
+            total_spent = kalshi_yes + poly_no
+            if total_spent < 1: # Use 0.98 to account for slippage/fees
+                arbitrage_cases.append({
+                    "type": f"YES_Kalshi_{kalshi_team_code} + NO_Poly_{outcome_name}",
+                    "outcome": outcome_name,
+                    "cost": total_spent,
+                    "profit": 1 - total_spent
+                })
+
+
+        # Case 2: Buy Team A 'YES' on Polymarket, 'NO' on Kalshi
+        if kalshi_no > 0:
+            total_spent = poly_yes + kalshi_no
             if total_spent < 1:
                 arbitrage_cases.append({
-                    "type": "YES_Kalshi + NO_Polymarket",
-                    "outcome": outcome,
-                    "kalshi_yes": kalshi_prices["yes"],
-                    "polymarket_no": poly_no,
-                    "sum": total_spent,
-                    "profit": 1 - total_spent,
+                    "type": f"YES_Poly_{outcome_name} + NO_Kalshi_{kalshi_team_code}",
+                    "outcome": outcome_name,
+                    "cost": total_spent,
+                    "profit": 1 - total_spent
                 })
-        # Case 2: Buy YES on Polymarket, NO on Kalshi
-        if poly_yes is not None and kalshi_prices["no"] is not None:
-            total_spent = poly_yes + kalshi_prices["no"]
-            if total_spent < 1:
-                arbitrage_cases.append({
-                    "type": "YES_Polymarket + NO_Kalshi",
-                    "outcome": outcome,
-                    "polymarket_yes": poly_yes,
-                    "kalshi_no": kalshi_prices["no"],
-                    "sum": total_spent,
-                    "profit": 1 - total_spent,
-                })
+                
     return arbitrage_cases
+
+def is_same_team(kalshi_team_code, outcome_name, league):
+    return kalshi_poly_dict[league][kalshi_team_code]['name'] == outcome_name
 
 def main():
     matcher = MarketMatcher()
@@ -106,7 +122,7 @@ def main():
                 print(f"Type: {arb['type']}")
                 print(f"  Kalshi YES: {item['kalshi_yes']}, Kalshi NO: {item['kalshi_no']}")
                 print(f"  Polymarket YES: {price_list[outcomes.index(arb['outcome'])]}, NO: {1 - price_list[outcomes.index(arb['outcome'])]}")
-                print(f"  Cost: {arb['sum']:.3f}, Guaranteed Profit: {arb['profit']:.3f}\n")
+                print(f"  Cost: {arb['cost']:.3f}, Guaranteed Profit: {arb['profit']:.3f}\n")
             print(f"==========================\n")
         else:
             print(f"No arbitrage for: {kalshi_ticker} ({kalshi_title})")
