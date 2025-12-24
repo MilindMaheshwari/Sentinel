@@ -1,9 +1,9 @@
 import json
-from kalshi_fetcher import get_open_markets_for_series
-from match_market import MarketMatcher
+from lib.kalshi_fetcher import get_open_markets_for_series
+from lib.match_market import MarketMatcher
 import requests
 
-with open('dicts/abbreviations.json', 'r') as f:
+with open('lib/dictionaries/abbreviations.json', 'r') as f:
     kalshi_poly_dict = json.load(f)
 
 SERIES_TICKERS = ["KXNBAGAME", "KXNFLGAME", "KXNHLGAME", "KXMLBGAME"]

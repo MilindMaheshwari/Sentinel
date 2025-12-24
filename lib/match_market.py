@@ -3,7 +3,7 @@ import re
 from rapidfuzz import fuzz
 import json
 
-with open('dicts/abbreviations.json', 'r') as f:
+with open('lib/dictionaries/abbreviations.json', 'r') as f:
     kalshi_poly_dict = json.load(f)
 
 # --- GLOBAL CONFIGURATION ---

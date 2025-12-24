@@ -8,8 +8,8 @@
       "Nuggets"
     ],
     "polymarket_prices": [
-      0.38,
-      0.62
+      0.4,
+      0.6
     ],
     "kalshi_yes": "0.4000",
     "kalshi_no": "0.6200",
@@ -24,8 +24,8 @@
       "Nuggets"
     ],
     "polymarket_prices": [
-      0.38,
-      0.62
+      0.4,
+      0.6
     ],
     "kalshi_yes": "0.6200",
     "kalshi_no": "0.4000",
@@ -40,12 +40,19 @@
       "Warriors"
     ],
     "polymarket_prices": [
-      0.29,
-      0.71
+      0.295,
+      0.705
     ],
-    "kalshi_yes": "0.7200",
-    "kalshi_no": "0.3000",
-    "arbitrage_opportunities": []
+    "kalshi_yes": "0.7300",
+    "kalshi_no": "0.2900",
+    "arbitrage_opportunities": [
+      {
+        "type": "YES_Poly_Warriors + NO_Kalshi_GSW",
+        "outcome": "Warriors",
+        "cost": 0.9949999999999999,
+        "profit": 0.0050000000000001155
+      }
+    ]
   },
   {
     "kalshi_ticker": "KXNBAGAME-25DEC25DALGSW-DAL",
@@ -56,11 +63,11 @@
       "Warriors"
     ],
     "polymarket_prices": [
-      0.29,
-      0.71
+      0.295,
+      0.705
     ],
-    "kalshi_yes": "0.2900",
-    "kalshi_no": "0.7200",
+    "kalshi_yes": "0.3000",
+    "kalshi_no": "0.7100",
     "arbitrage_opportunities": []
   },
   {
@@ -72,11 +79,11 @@
       "Knicks"
     ],
     "polymarket_prices": [
-      0.335,
-      0.665
+      0.325,
+      0.675
     ],
-    "kalshi_yes": "0.6800",
-    "kalshi_no": "0.3500",
+    "kalshi_yes": "0.6900",
+    "kalshi_no": "0.3300",
     "arbitrage_opportunities": []
   },
   {
@@ -88,11 +95,11 @@
       "Knicks"
     ],
     "polymarket_prices": [
-      0.335,
-      0.665
+      0.325,
+      0.675
     ],
-    "kalshi_yes": "0.3500",
-    "kalshi_no": "0.6700",
+    "kalshi_yes": "0.3400",
+    "kalshi_no": "0.6800",
     "arbitrage_opportunities": []
   },
   {
@@ -104,19 +111,12 @@
       "Lakers"
     ],
     "polymarket_prices": [
-      0.635,
-      0.365
+      0.605,
+      0.395
     ],
-    "kalshi_yes": "0.3800",
-    "kalshi_no": "0.6300",
-    "arbitrage_opportunities": [
-      {
-        "type": "YES_Poly_Lakers + NO_Kalshi_LAL",
-        "outcome": "Lakers",
-        "cost": 0.995,
-        "profit": 0.0050000000000000044
-      }
-    ]
+    "kalshi_yes": "0.4100",
+    "kalshi_no": "0.6100",
+    "arbitrage_opportunities": []
   },
   {
     "kalshi_ticker": "KXNBAGAME-25DEC25HOULAL-HOU",
@@ -127,19 +127,12 @@
       "Lakers"
     ],
     "polymarket_prices": [
-      0.635,
-      0.365
+      0.605,
+      0.395
     ],
-    "kalshi_yes": "0.6300",
-    "kalshi_no": "0.3900",
-    "arbitrage_opportunities": [
-      {
-        "type": "YES_Kalshi_HOU + NO_Poly_Rockets",
-        "outcome": "Rockets",
-        "cost": 0.995,
-        "profit": 0.0050000000000000044
-      }
-    ]
+    "kalshi_yes": "0.6100",
+    "kalshi_no": "0.4100",
+    "arbitrage_opportunities": []
   },
   {
     "kalshi_ticker": "KXNBAGAME-25DEC25SASOKC-SAS",
@@ -150,12 +143,19 @@
       "Thunder"
     ],
     "polymarket_prices": [
-      0.27,
-      0.73
+      0.26,
+      0.74
     ],
     "kalshi_yes": "0.2800",
-    "kalshi_no": "0.7500",
-    "arbitrage_opportunities": []
+    "kalshi_no": "0.7300",
+    "arbitrage_opportunities": [
+      {
+        "type": "YES_Poly_Spurs + NO_Kalshi_SAS",
+        "outcome": "Spurs",
+        "cost": 0.99,
+        "profit": 0.010000000000000009
+      }
+    ]
   },
   {
     "kalshi_ticker": "KXNBAGAME-25DEC25SASOKC-OKC",
@@ -166,121 +166,11 @@
       "Thunder"
     ],
     "polymarket_prices": [
-      0.27,
-      0.73
+      0.26,
+      0.74
     ],
     "kalshi_yes": "0.7400",
-    "kalshi_no": "0.2900",
-    "arbitrage_opportunities": []
-  },
-  {
-    "kalshi_ticker": "KXNBAGAME-25DEC23ORLPOR-POR",
-    "kalshi_title": "Orlando vs Portland Winner?",
-    "polymarket_slug": "nba-orl-por-2025-12-23",
-    "outcomes": [
-      "Magic",
-      "Trail Blazers"
-    ],
-    "polymarket_prices": [
-      0.995,
-      0.005
-    ],
-    "kalshi_yes": "1.0000",
-    "kalshi_no": "1.0000",
-    "arbitrage_opportunities": []
-  },
-  {
-    "kalshi_ticker": "KXNBAGAME-25DEC23ORLPOR-ORL",
-    "kalshi_title": "Orlando vs Portland Winner?",
-    "polymarket_slug": "nba-orl-por-2025-12-23",
-    "outcomes": [
-      "Magic",
-      "Trail Blazers"
-    ],
-    "polymarket_prices": [
-      0.995,
-      0.005
-    ],
-    "kalshi_yes": "1.0000",
-    "kalshi_no": "1.0000",
-    "arbitrage_opportunities": []
-  },
-  {
-    "kalshi_ticker": "KXNBAGAME-25DEC23HOULAC-LAC",
-    "kalshi_title": "Houston vs Los Angeles C Winner?",
-    "polymarket_slug": "nba-hou-lac-2025-12-23",
-    "outcomes": [
-      "Rockets",
-      "Clippers"
-    ],
-    "polymarket_prices": [
-      0.135,
-      0.865
-    ],
-    "kalshi_yes": "0.9600",
-    "kalshi_no": "0.0500",
-    "arbitrage_opportunities": [
-      {
-        "type": "YES_Poly_Clippers + NO_Kalshi_LAC",
-        "outcome": "Clippers",
-        "cost": 0.915,
-        "profit": 0.08499999999999996
-      }
-    ]
-  },
-  {
-    "kalshi_ticker": "KXNBAGAME-25DEC23HOULAC-HOU",
-    "kalshi_title": "Houston vs Los Angeles C Winner?",
-    "polymarket_slug": "nba-hou-lac-2025-12-23",
-    "outcomes": [
-      "Rockets",
-      "Clippers"
-    ],
-    "polymarket_prices": [
-      0.135,
-      0.865
-    ],
-    "kalshi_yes": "0.0500",
-    "kalshi_no": "0.9600",
-    "arbitrage_opportunities": [
-      {
-        "type": "YES_Kalshi_HOU + NO_Poly_Rockets",
-        "outcome": "Rockets",
-        "cost": 0.915,
-        "profit": 0.08499999999999996
-      }
-    ]
-  },
-  {
-    "kalshi_ticker": "KXNBAGAME-25DEC23DETSAC-SAC",
-    "kalshi_title": "Detroit vs Sacramento Winner?",
-    "polymarket_slug": "nba-det-sac-2025-12-23",
-    "outcomes": [
-      "Pistons",
-      "Kings"
-    ],
-    "polymarket_prices": [
-      0.9975,
-      0.0025
-    ],
-    "kalshi_yes": "0.0100",
-    "kalshi_no": "1.0000",
-    "arbitrage_opportunities": []
-  },
-  {
-    "kalshi_ticker": "KXNBAGAME-25DEC23DETSAC-DET",
-    "kalshi_title": "Detroit vs Sacramento Winner?",
-    "polymarket_slug": "nba-det-sac-2025-12-23",
-    "outcomes": [
-      "Pistons",
-      "Kings"
-    ],
-    "polymarket_prices": [
-      0.9975,
-      0.0025
-    ],
-    "kalshi_yes": "1.0000",
-    "kalshi_no": "0.0100",
+    "kalshi_no": "0.2700",
     "arbitrage_opportunities": []
   },
   {
@@ -476,7 +366,7 @@
       0.62,
       0.38
     ],
-    "kalshi_yes": "0.6300",
+    "kalshi_yes": "0.6400",
     "kalshi_no": "0.3900",
     "arbitrage_opportunities": []
   },
