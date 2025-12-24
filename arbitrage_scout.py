@@ -3,7 +3,7 @@ from kalshi_fetcher import get_open_markets_for_series
 from match_market import MarketMatcher
 import requests
 
-with open('dictionaries/kalshi_poly_dict.json', 'r') as f:
+with open('dicts/abbreviations.json', 'r') as f:
     kalshi_poly_dict = json.load(f)
 
 SERIES_TICKERS = ["KXNBAGAME", "KXNFLGAME", "KXNHLGAME", "KXMLBGAME"]
@@ -129,6 +129,7 @@ def main():
 
     with open("arbitrage_opportunities.json", "w") as f:
         json.dump(results, f, indent=2)
+
     print("\nResults saved to arbitrage_opportunities.json")
 
 if __name__ == "__main__":

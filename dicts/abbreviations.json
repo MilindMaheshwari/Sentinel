@@ -112,7 +112,7 @@
         "FLA": {"city": "Florida", "name": "Panthers", "poly_slug": "panthers", "poly_abbr": "FLA"},
         "LAK": {"city": "LA", "name": "Kings", "poly_slug": "kings", "poly_abbr": "LAK"},
         "MIN": {"city": "Minnesota", "name": "Wild", "poly_slug": "wild", "poly_abbr": "MIN"},
-        "MTL": {"city": "Montreal", "name": "Canadiens", "poly_slug": "canadiens", "poly_abbr": "MTL"},
+        "MTL": {"city": "Montreal", "name": "Canadiens", "poly_slug": "canadiens", "poly_abbr": "MON"},
         "NSH": {"city": "Nashville", "name": "Predators", "poly_slug": "predators", "poly_abbr": "NSH"},
         "NJD": {"city": "New Jersey", "name": "Devils", "poly_slug": "devils", "poly_abbr": "NJD"},
         "NYI": {"city": "New York", "name": "Islanders", "poly_slug": "islanders", "poly_abbr": "NYI"},
