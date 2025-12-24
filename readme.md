@@ -1,0 +1,1 @@
+A Quantitative Analysis bot that discovers favourable betting markets across platforms such as Polymarket and Kalshi
