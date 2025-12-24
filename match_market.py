@@ -1,6 +1,13 @@
 import requests
 import re
 from rapidfuzz import fuzz
+import json
+
+with open('dictionaries/abbreviation_mismatches.json', 'r') as f:
+    abbreviation_mismatches = json.load(f)
+
+with open('dictionaries/kalshi_poly_dict.json', 'r') as f:
+    kalshi_poly_dict = json.load(f)
 
 # --- GLOBAL CONFIGURATION ---
 POLY_WEB_BASE = "https://polymarket.com/event"
@@ -40,6 +47,15 @@ class MarketMatcher:
         if match:
             # Re-mapping the groups to the correct order
             yr, mon, day, away, home = match.groups()
+
+            # if away in abbreviation_mismatches:
+            #     away = abbreviation_mismatches[away]
+            # if home in abbreviation_mismatches:
+            #     home = abbreviation_mismatches[home]
+
+            print(f"League: {league_prefix}, Away: {away.upper()}, Home: {home.upper()}")
+            away = kalshi_poly_dict[league_prefix.upper()][away.upper()]['poly_abbr'].lower()
+            home = kalshi_poly_dict[league_prefix.upper()][home.upper()]['poly_abbr'].lower()
             
             # Format to ISO: 2025-12-23
             iso_date = f"20{yr}-{self.months.get(mon, '01')}-{day}"
