@@ -1,0 +1,666 @@
+[
+  {
+    "kalshi_ticker": "KXNBAGAME-25DEC25MINDEN-MIN",
+    "kalshi_title": "Minnesota vs Denver Winner?",
+    "polymarket_slug": "nba-min-den-2025-12-25",
+    "outcomes": [
+      "Timberwolves",
+      "Nuggets"
+    ],
+    "polymarket_prices": [
+      0.38,
+      0.62
+    ],
+    "kalshi_yes": "0.4000",
+    "kalshi_no": "0.6200",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXNBAGAME-25DEC25MINDEN-DEN",
+    "kalshi_title": "Minnesota vs Denver Winner?",
+    "polymarket_slug": "nba-min-den-2025-12-25",
+    "outcomes": [
+      "Timberwolves",
+      "Nuggets"
+    ],
+    "polymarket_prices": [
+      0.38,
+      0.62
+    ],
+    "kalshi_yes": "0.6200",
+    "kalshi_no": "0.4000",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXNBAGAME-25DEC25DALGSW-GSW",
+    "kalshi_title": "Dallas vs Golden State Winner?",
+    "polymarket_slug": "nba-dal-gsw-2025-12-25",
+    "outcomes": [
+      "Mavericks",
+      "Warriors"
+    ],
+    "polymarket_prices": [
+      0.29,
+      0.71
+    ],
+    "kalshi_yes": "0.7200",
+    "kalshi_no": "0.3000",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXNBAGAME-25DEC25DALGSW-DAL",
+    "kalshi_title": "Dallas vs Golden State Winner?",
+    "polymarket_slug": "nba-dal-gsw-2025-12-25",
+    "outcomes": [
+      "Mavericks",
+      "Warriors"
+    ],
+    "polymarket_prices": [
+      0.29,
+      0.71
+    ],
+    "kalshi_yes": "0.2900",
+    "kalshi_no": "0.7200",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXNBAGAME-25DEC25CLENYK-NYK",
+    "kalshi_title": "Cleveland vs New York Winner?",
+    "polymarket_slug": "nba-cle-nyk-2025-12-25",
+    "outcomes": [
+      "Cavaliers",
+      "Knicks"
+    ],
+    "polymarket_prices": [
+      0.335,
+      0.665
+    ],
+    "kalshi_yes": "0.6800",
+    "kalshi_no": "0.3500",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXNBAGAME-25DEC25CLENYK-CLE",
+    "kalshi_title": "Cleveland vs New York Winner?",
+    "polymarket_slug": "nba-cle-nyk-2025-12-25",
+    "outcomes": [
+      "Cavaliers",
+      "Knicks"
+    ],
+    "polymarket_prices": [
+      0.335,
+      0.665
+    ],
+    "kalshi_yes": "0.3500",
+    "kalshi_no": "0.6700",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXNBAGAME-25DEC25HOULAL-LAL",
+    "kalshi_title": "Houston vs Los Angeles L Winner?",
+    "polymarket_slug": "nba-hou-lal-2025-12-25",
+    "outcomes": [
+      "Rockets",
+      "Lakers"
+    ],
+    "polymarket_prices": [
+      0.635,
+      0.365
+    ],
+    "kalshi_yes": "0.3800",
+    "kalshi_no": "0.6300",
+    "arbitrage_opportunities": [
+      {
+        "type": "YES_Poly_Lakers + NO_Kalshi_LAL",
+        "outcome": "Lakers",
+        "cost": 0.995,
+        "profit": 0.0050000000000000044
+      }
+    ]
+  },
+  {
+    "kalshi_ticker": "KXNBAGAME-25DEC25HOULAL-HOU",
+    "kalshi_title": "Houston vs Los Angeles L Winner?",
+    "polymarket_slug": "nba-hou-lal-2025-12-25",
+    "outcomes": [
+      "Rockets",
+      "Lakers"
+    ],
+    "polymarket_prices": [
+      0.635,
+      0.365
+    ],
+    "kalshi_yes": "0.6300",
+    "kalshi_no": "0.3900",
+    "arbitrage_opportunities": [
+      {
+        "type": "YES_Kalshi_HOU + NO_Poly_Rockets",
+        "outcome": "Rockets",
+        "cost": 0.995,
+        "profit": 0.0050000000000000044
+      }
+    ]
+  },
+  {
+    "kalshi_ticker": "KXNBAGAME-25DEC25SASOKC-SAS",
+    "kalshi_title": "San Antonio vs Oklahoma City Winner?",
+    "polymarket_slug": "nba-sas-okc-2025-12-25",
+    "outcomes": [
+      "Spurs",
+      "Thunder"
+    ],
+    "polymarket_prices": [
+      0.27,
+      0.73
+    ],
+    "kalshi_yes": "0.2800",
+    "kalshi_no": "0.7500",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXNBAGAME-25DEC25SASOKC-OKC",
+    "kalshi_title": "San Antonio vs Oklahoma City Winner?",
+    "polymarket_slug": "nba-sas-okc-2025-12-25",
+    "outcomes": [
+      "Spurs",
+      "Thunder"
+    ],
+    "polymarket_prices": [
+      0.27,
+      0.73
+    ],
+    "kalshi_yes": "0.7400",
+    "kalshi_no": "0.2900",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXNBAGAME-25DEC23ORLPOR-POR",
+    "kalshi_title": "Orlando vs Portland Winner?",
+    "polymarket_slug": "nba-orl-por-2025-12-23",
+    "outcomes": [
+      "Magic",
+      "Trail Blazers"
+    ],
+    "polymarket_prices": [
+      0.995,
+      0.005
+    ],
+    "kalshi_yes": "1.0000",
+    "kalshi_no": "1.0000",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXNBAGAME-25DEC23ORLPOR-ORL",
+    "kalshi_title": "Orlando vs Portland Winner?",
+    "polymarket_slug": "nba-orl-por-2025-12-23",
+    "outcomes": [
+      "Magic",
+      "Trail Blazers"
+    ],
+    "polymarket_prices": [
+      0.995,
+      0.005
+    ],
+    "kalshi_yes": "1.0000",
+    "kalshi_no": "1.0000",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXNBAGAME-25DEC23HOULAC-LAC",
+    "kalshi_title": "Houston vs Los Angeles C Winner?",
+    "polymarket_slug": "nba-hou-lac-2025-12-23",
+    "outcomes": [
+      "Rockets",
+      "Clippers"
+    ],
+    "polymarket_prices": [
+      0.135,
+      0.865
+    ],
+    "kalshi_yes": "0.9600",
+    "kalshi_no": "0.0500",
+    "arbitrage_opportunities": [
+      {
+        "type": "YES_Poly_Clippers + NO_Kalshi_LAC",
+        "outcome": "Clippers",
+        "cost": 0.915,
+        "profit": 0.08499999999999996
+      }
+    ]
+  },
+  {
+    "kalshi_ticker": "KXNBAGAME-25DEC23HOULAC-HOU",
+    "kalshi_title": "Houston vs Los Angeles C Winner?",
+    "polymarket_slug": "nba-hou-lac-2025-12-23",
+    "outcomes": [
+      "Rockets",
+      "Clippers"
+    ],
+    "polymarket_prices": [
+      0.135,
+      0.865
+    ],
+    "kalshi_yes": "0.0500",
+    "kalshi_no": "0.9600",
+    "arbitrage_opportunities": [
+      {
+        "type": "YES_Kalshi_HOU + NO_Poly_Rockets",
+        "outcome": "Rockets",
+        "cost": 0.915,
+        "profit": 0.08499999999999996
+      }
+    ]
+  },
+  {
+    "kalshi_ticker": "KXNBAGAME-25DEC23DETSAC-SAC",
+    "kalshi_title": "Detroit vs Sacramento Winner?",
+    "polymarket_slug": "nba-det-sac-2025-12-23",
+    "outcomes": [
+      "Pistons",
+      "Kings"
+    ],
+    "polymarket_prices": [
+      0.9975,
+      0.0025
+    ],
+    "kalshi_yes": "0.0100",
+    "kalshi_no": "1.0000",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXNBAGAME-25DEC23DETSAC-DET",
+    "kalshi_title": "Detroit vs Sacramento Winner?",
+    "polymarket_slug": "nba-det-sac-2025-12-23",
+    "outcomes": [
+      "Pistons",
+      "Kings"
+    ],
+    "polymarket_prices": [
+      0.9975,
+      0.0025
+    ],
+    "kalshi_yes": "1.0000",
+    "kalshi_no": "0.0100",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXNFLGAME-25DEC27HOULAC-LAC",
+    "kalshi_title": "Houston at Los Angeles C Winner?",
+    "polymarket_slug": "nfl-hou-lac-2025-12-27",
+    "outcomes": [
+      "Texans",
+      "Chargers"
+    ],
+    "polymarket_prices": [
+      0.445,
+      0.555
+    ],
+    "kalshi_yes": "0.5700",
+    "kalshi_no": "0.4500",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXNFLGAME-25DEC27HOULAC-HOU",
+    "kalshi_title": "Houston at Los Angeles C Winner?",
+    "polymarket_slug": "nfl-hou-lac-2025-12-27",
+    "outcomes": [
+      "Texans",
+      "Chargers"
+    ],
+    "polymarket_prices": [
+      0.445,
+      0.555
+    ],
+    "kalshi_yes": "0.4600",
+    "kalshi_no": "0.5600",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXNFLGAME-25DEC28PHIBUF-PHI",
+    "kalshi_title": "Philadelphia at Buffalo Winner?",
+    "polymarket_slug": "nfl-phi-buf-2025-12-28",
+    "outcomes": [
+      "Eagles",
+      "Bills"
+    ],
+    "polymarket_prices": [
+      0.475,
+      0.525
+    ],
+    "kalshi_yes": "0.4700",
+    "kalshi_no": "0.5400",
+    "arbitrage_opportunities": [
+      {
+        "type": "YES_Kalshi_PHI + NO_Poly_Eagles",
+        "outcome": "Eagles",
+        "cost": 0.995,
+        "profit": 0.0050000000000000044
+      }
+    ]
+  },
+  {
+    "kalshi_ticker": "KXNFLGAME-25DEC28PHIBUF-BUF",
+    "kalshi_title": "Philadelphia at Buffalo Winner?",
+    "polymarket_slug": "nfl-phi-buf-2025-12-28",
+    "outcomes": [
+      "Eagles",
+      "Bills"
+    ],
+    "polymarket_prices": [
+      0.475,
+      0.525
+    ],
+    "kalshi_yes": "0.5400",
+    "kalshi_no": "0.4800",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXNFLGAME-25DEC28SEACAR-SEA",
+    "kalshi_title": "Seattle at Carolina Winner?",
+    "polymarket_slug": "nfl-sea-car-2025-12-28",
+    "outcomes": [
+      "Seahawks",
+      "Panthers"
+    ],
+    "polymarket_prices": [
+      0.745,
+      0.255
+    ],
+    "kalshi_yes": "0.7500",
+    "kalshi_no": "0.2700",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXNFLGAME-25DEC28SEACAR-CAR",
+    "kalshi_title": "Seattle at Carolina Winner?",
+    "polymarket_slug": "nfl-sea-car-2025-12-28",
+    "outcomes": [
+      "Seahawks",
+      "Panthers"
+    ],
+    "polymarket_prices": [
+      0.745,
+      0.255
+    ],
+    "kalshi_yes": "0.2700",
+    "kalshi_no": "0.7500",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXNFLGAME-25DEC28JACIND-JAC",
+    "kalshi_title": "Jacksonville at Indianapolis Winner?",
+    "polymarket_slug": "nfl-jax-ind-2025-12-28",
+    "outcomes": [
+      "Jaguars",
+      "Colts"
+    ],
+    "polymarket_prices": [
+      0.73,
+      0.27
+    ],
+    "kalshi_yes": "0.7200",
+    "kalshi_no": "0.2900",
+    "arbitrage_opportunities": [
+      {
+        "type": "YES_Kalshi_JAC + NO_Poly_Jaguars",
+        "outcome": "Jaguars",
+        "cost": 0.99,
+        "profit": 0.010000000000000009
+      }
+    ]
+  },
+  {
+    "kalshi_ticker": "KXNFLGAME-25DEC28JACIND-IND",
+    "kalshi_title": "Jacksonville at Indianapolis Winner?",
+    "polymarket_slug": "nfl-jax-ind-2025-12-28",
+    "outcomes": [
+      "Jaguars",
+      "Colts"
+    ],
+    "polymarket_prices": [
+      0.73,
+      0.27
+    ],
+    "kalshi_yes": "0.2900",
+    "kalshi_no": "0.7200",
+    "arbitrage_opportunities": [
+      {
+        "type": "YES_Poly_Colts + NO_Kalshi_IND",
+        "outcome": "Colts",
+        "cost": 0.99,
+        "profit": 0.010000000000000009
+      }
+    ]
+  },
+  {
+    "kalshi_ticker": "KXNFLGAME-25DEC28ARICIN-CIN",
+    "kalshi_title": "Arizona at Cincinnati Winner?",
+    "polymarket_slug": "nfl-ari-cin-2025-12-28",
+    "outcomes": [
+      "Cardinals",
+      "Bengals"
+    ],
+    "polymarket_prices": [
+      0.245,
+      0.755
+    ],
+    "kalshi_yes": "0.7600",
+    "kalshi_no": "0.2500",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXNFLGAME-25DEC28ARICIN-ARI",
+    "kalshi_title": "Arizona at Cincinnati Winner?",
+    "polymarket_slug": "nfl-ari-cin-2025-12-28",
+    "outcomes": [
+      "Cardinals",
+      "Bengals"
+    ],
+    "polymarket_prices": [
+      0.245,
+      0.755
+    ],
+    "kalshi_yes": "0.2500",
+    "kalshi_no": "0.7700",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXNFLGAME-25DEC28PITCLE-PIT",
+    "kalshi_title": "Pittsburgh at Cleveland Winner?",
+    "polymarket_slug": "nfl-pit-cle-2025-12-28",
+    "outcomes": [
+      "Steelers",
+      "Browns"
+    ],
+    "polymarket_prices": [
+      0.62,
+      0.38
+    ],
+    "kalshi_yes": "0.6300",
+    "kalshi_no": "0.3900",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXNFLGAME-25DEC28PITCLE-CLE",
+    "kalshi_title": "Pittsburgh at Cleveland Winner?",
+    "polymarket_slug": "nfl-pit-cle-2025-12-28",
+    "outcomes": [
+      "Steelers",
+      "Browns"
+    ],
+    "polymarket_prices": [
+      0.62,
+      0.38
+    ],
+    "kalshi_yes": "0.3900",
+    "kalshi_no": "0.6300",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXNFLGAME-25DEC25DETMIN-MIN",
+    "kalshi_title": "Detroit at Minnesota Winner?",
+    "polymarket_slug": "nfl-det-min-2025-12-25",
+    "outcomes": [
+      "Lions",
+      "Vikings"
+    ],
+    "polymarket_prices": [
+      0.76,
+      0.24
+    ],
+    "kalshi_yes": "0.2500",
+    "kalshi_no": "0.7600",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXNFLGAME-25DEC25DETMIN-DET",
+    "kalshi_title": "Detroit at Minnesota Winner?",
+    "polymarket_slug": "nfl-det-min-2025-12-25",
+    "outcomes": [
+      "Lions",
+      "Vikings"
+    ],
+    "polymarket_prices": [
+      0.76,
+      0.24
+    ],
+    "kalshi_yes": "0.7600",
+    "kalshi_no": "0.2500",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXNFLGAME-25DEC25DALWAS-WAS",
+    "kalshi_title": "Dallas at Washington Winner?",
+    "polymarket_slug": "nfl-dal-was-2025-12-25",
+    "outcomes": [
+      "Cowboys",
+      "Commanders"
+    ],
+    "polymarket_prices": [
+      0.745,
+      0.255
+    ],
+    "kalshi_yes": "0.2600",
+    "kalshi_no": "0.7500",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXNFLGAME-25DEC25DALWAS-DAL",
+    "kalshi_title": "Dallas at Washington Winner?",
+    "polymarket_slug": "nfl-dal-was-2025-12-25",
+    "outcomes": [
+      "Cowboys",
+      "Commanders"
+    ],
+    "polymarket_prices": [
+      0.745,
+      0.255
+    ],
+    "kalshi_yes": "0.7600",
+    "kalshi_no": "0.2500",
+    "arbitrage_opportunities": [
+      {
+        "type": "YES_Poly_Cowboys + NO_Kalshi_DAL",
+        "outcome": "Cowboys",
+        "cost": 0.995,
+        "profit": 0.0050000000000000044
+      }
+    ]
+  },
+  {
+    "kalshi_ticker": "KXMLBGAME-25APR18CWSBOS-CWS",
+    "kalshi_title": "Chicago WS vs Boston Winner?",
+    "polymarket_slug": "mlb-cws-bos-2025-04-18",
+    "outcomes": [
+      "Chicago White Sox",
+      "Boston Red Sox"
+    ],
+    "polymarket_prices": [
+      0.0,
+      1.0
+    ],
+    "kalshi_yes": "0.7100",
+    "kalshi_no": "0.8300",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXMLBGAME-25APR18CWSBOS-BOS",
+    "kalshi_title": "Chicago WS vs Boston Winner?",
+    "polymarket_slug": "mlb-cws-bos-2025-04-18",
+    "outcomes": [
+      "Chicago White Sox",
+      "Boston Red Sox"
+    ],
+    "polymarket_prices": [
+      0.0,
+      1.0
+    ],
+    "kalshi_yes": "0.7100",
+    "kalshi_no": "0.8300",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXMLBGAME-25APR18LADTEX-TEX",
+    "kalshi_title": "Los Angeles D vs Texas Winner?",
+    "polymarket_slug": "mlb-lad-tex-2025-04-18",
+    "outcomes": [
+      "Los Angeles Dodgers",
+      "Texas Rangers"
+    ],
+    "polymarket_prices": [
+      1.0,
+      0.0
+    ],
+    "kalshi_yes": "0.7100",
+    "kalshi_no": "0.8300",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXMLBGAME-25APR18LADTEX-LAD",
+    "kalshi_title": "Los Angeles D vs Texas Winner?",
+    "polymarket_slug": "mlb-lad-tex-2025-04-18",
+    "outcomes": [
+      "Los Angeles Dodgers",
+      "Texas Rangers"
+    ],
+    "polymarket_prices": [
+      1.0,
+      0.0
+    ],
+    "kalshi_yes": "0.7100",
+    "kalshi_no": "0.8300",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXMLBGAME-25APR18STLNYM-STL",
+    "kalshi_title": "St. Louis vs New York M Winner?",
+    "polymarket_slug": "mlb-stl-nym-2025-04-18",
+    "outcomes": [
+      "St. Louis Cardinals",
+      "New York Mets"
+    ],
+    "polymarket_prices": [
+      0.0,
+      1.0
+    ],
+    "kalshi_yes": "0.7100",
+    "kalshi_no": "0.8300",
+    "arbitrage_opportunities": []
+  },
+  {
+    "kalshi_ticker": "KXMLBGAME-25APR18STLNYM-NYM",
+    "kalshi_title": "St. Louis vs New York M Winner?",
+    "polymarket_slug": "mlb-stl-nym-2025-04-18",
+    "outcomes": [
+      "St. Louis Cardinals",
+      "New York Mets"
+    ],
+    "polymarket_prices": [
+      0.0,
+      1.0
+    ],
+    "kalshi_yes": "0.7100",
+    "kalshi_no": "0.8300",
+    "arbitrage_opportunities": []
+  }
+]
