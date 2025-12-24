@@ -12,7 +12,9 @@ KALSHI_SIDES = ["yes", "no"]
 def fetch_polymarket_prices(slug):
     resp = requests.get(f"https://gamma-api.polymarket.com/markets/slug/{slug}")
     if resp.status_code != 200:
+        print(f"Error fetching Polymarket prices for {slug}: {resp.status_code}"    )   
         return None, None
+
     data = resp.json()
     try:
         outcomes = json.loads(data["outcomes"]) if isinstance(data["outcomes"], str) else data["outcomes"]
@@ -92,14 +94,18 @@ def main():
         kalshi_ticker = kalshi_market.get("ticker", "?")
         kalshi_title = kalshi_market.get("title", "?")
         match = matcher.find_polymarket_match(kalshi_market)
+        
         if not match:
             print(f"❌ No Polymarket match for {kalshi_ticker} - {kalshi_title}")
             continue
+
         polymarket_slug = match.get('slug') or (match.get('final_url', '').split('/')[-1])
         outcomes, price_list = fetch_polymarket_prices(polymarket_slug)
+
         if not outcomes or not price_list:
             print(f"❌ Could not fetch Polymarket prices for {polymarket_slug}")
             continue
+        
         arb_opps = detect_arbitrage(kalshi_market, polymarket_slug, outcomes, price_list)
         item = {
             "kalshi_ticker": kalshi_ticker,
