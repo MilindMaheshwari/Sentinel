@@ -1,6 +1,6 @@
 import requests
 import re
-from rapidfuzz import fuzz
+# from rapidfuzz import fuzz
 import json
 
 with open('lib/dictionaries/abbreviations.json', 'r') as f:

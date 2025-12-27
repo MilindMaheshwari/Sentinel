@@ -1,3 +1,6 @@
 *.db
 __pycache__/
 .env
+*.env
+backend/alembic.ini
+backend/migrations/

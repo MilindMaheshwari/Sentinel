@@ -2,12 +2,12 @@ from fastapi import FastAPI, Depends, Query
 from sqlalchemy.orm import Session
 from db import get_db
 from models import KalshiMarket, PolymarketMarket, MarketMatchMap, Base
-from arbitrage_utils import needs_update, detect_arbitrage
 from typing import List
 from sqlalchemy import or_
 from datetime import datetime
 import uvicorn
 from decimal import Decimal
+from fetch_and_sync_markets import fetch_and_sync_and_calculate_profit
 
 app = FastAPI()
 
@@ -17,16 +17,15 @@ Base.metadata.create_all(bind=engine)
 
 @app.get("/api/refresh-arbitrage")
 def refresh_arbitrage(db: Session = Depends(get_db)):
-    # Check if any mapping is older than 30 min, if so, trigger update
-    THRESHOLD = 30
+    THRESHOLD = -1
     mappings = db.query(MarketMatchMap).all()
-    stale = (not mappings) or any(needs_update(m.last_updated, THRESHOLD) for m in mappings)
+    stale = (not mappings) or any((m.last_updated is None) or ((datetime.utcnow() - m.last_updated).total_seconds() > THRESHOLD * 60) for m in mappings)
     if stale:
-        from fetch_and_sync_markets import fetch_and_sync_markets
-        fetch_and_sync_markets(db)
+        fetch_and_sync_and_calculate_profit(db)
         # Re-load mappings to count, after update
         mappings = db.query(MarketMatchMap).all()
     return {
+        "mappings": mappings,
         "refreshed": stale,
         "matched_pairs": len(mappings),
         "note": "Market data refreshed and symmetrical by team per market."
@@ -34,7 +33,7 @@ def refresh_arbitrage(db: Session = Depends(get_db)):
 
 @app.get("/api/markets/matches")
 def get_market_matches(db: Session = Depends(get_db)):
-    # Now returns market matchings for BOTH teams per game
+    # Returns market matchings including profit and direction per market/team
     mappings = db.query(MarketMatchMap).all()
     result = []
     for m in mappings:
@@ -58,6 +57,8 @@ def get_market_matches(db: Session = Depends(get_db)):
                 "away_price": float(p.away_price),
                 "last_updated": p.last_updated,
             },
+            "profit": float(m.profit) if m.profit else None,
+            "direction": m.direction,
             "match_score": float(m.match_score) if m.match_score else None,
             "league": m.league,
             "last_updated": m.last_updated
@@ -65,40 +66,33 @@ def get_market_matches(db: Session = Depends(get_db)):
     return result
 
 @app.get("/api/arbitrage")
-def get_arbitrage(min_profit: float = Query(0.02), db: Session = Depends(get_db)):
-    # Returns all possible arbitrage opps per team-market
-    mappings = db.query(MarketMatchMap).all()
+def get_arbitrage(min_profit: float = Query(0.001), db: Session = Depends(get_db)):
+    # Returns all market matches with profit > min_profit
+    mappings = db.query(MarketMatchMap).filter(MarketMatchMap.profit > Decimal(str(min_profit))).all()
     opportunities = []
     for m in mappings:
-        if not m.kalshi_market or not m.polymarket_market:
-            continue
-        arbs = detect_arbitrage(
-            m.kalshi_market,
-            m.polymarket_market,
-            Decimal(str(min_profit))
-        )
-        for arb in arbs:
-            record = {
-                "kalshi_ticker": m.kalshi_market.ticker,
-                "polymarket_slug": m.polymarket_market.slug,
-                "type": arb['type'],
-                "team": arb['team'],
-                "cost": arb['cost'],
-                "profit": arb['profit'],
-                "kalshi": {
-                    "yes_ask_dollars": float(m.kalshi_market.yes_ask_dollars),
-                    "no_ask_dollars": float(m.kalshi_market.no_ask_dollars),
-                    "team": m.kalshi_market.team
-                },
-                "polymarket": {
-                    "home_team": m.polymarket_market.home_team,
-                    "away_team": m.polymarket_market.away_team,
-                    "home_price": float(m.polymarket_market.home_price),
-                    "away_price": float(m.polymarket_market.away_price)
-                },
-                "league": m.league
-            }
-            opportunities.append(record)
+        k, p = m.kalshi_market, m.polymarket_market
+        record = {
+            "kalshi_ticker": k.ticker,
+            "polymarket_slug": p.slug,
+            "team": k.team,
+            "profit": float(m.profit) if m.profit else None,
+            "direction": m.direction,
+            "kalshi": {
+                "yes_ask_dollars": float(k.yes_ask_dollars),
+                "no_ask_dollars": float(k.no_ask_dollars),
+                "team": k.team
+            },
+            "polymarket": {
+                "home_team": p.home_team,
+                "away_team": p.away_team,
+                "home_price": float(p.home_price),
+                "away_price": float(p.away_price)
+            },
+            "league": m.league,
+            "last_updated": m.last_updated
+        }
+        opportunities.append(record)
     return {"arbitrage_opportunities": opportunities}
 
 if __name__ == "__main__":

@@ -17,6 +17,9 @@ def fetch_polymarket_prices(slug):
 
     data = resp.json()
     try:
+
+        # outcomes = ["Home", "Away"]
+        # prices = [home_price, away_price] = [Home Yes, Away Yes] = [Away No, Home No]
         outcomes = json.loads(data["outcomes"]) if isinstance(data["outcomes"], str) else data["outcomes"]
         prices = json.loads(data["outcomePrices"]) if isinstance(data["outcomePrices"], str) else data["outcomePrices"]
         return outcomes, [float(p) for p in prices]

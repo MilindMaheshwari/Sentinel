@@ -6,8 +6,14 @@ from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 from decimal import Decimal
 import datetime
+import requests, json
+import logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger
+# Helper to resolve team string between Kalshi and Polymarket outcomes
+from arbitrage_utils import is_same_team
 
-def fetch_and_sync_markets(db: Session):
+def fetch_and_sync_and_calculate_profit(db: Session):
     matcher = MarketMatcher()
     SERIES_TICKERS = ["KXNBAGAME", "KXNFLGAME", "KXNHLGAME", "KXMLBGAME"]
     now = datetime.datetime.utcnow()
@@ -16,14 +22,39 @@ def fetch_and_sync_markets(db: Session):
     for ticker in SERIES_TICKERS:
         all_kalshi.extend(get_open_markets_for_series(ticker))
 
+
+    print(f"Found {len(all_kalshi)} Kalshi markets", flush=True)
+
     for k_market in all_kalshi:
-        kalshi_ticker = k_market.get("ticker", "")
-        kalshi_title = k_market.get("title", "")
+        kalshi_ticker = k_market.get("ticker")
+        kalshi_title = k_market.get("title")
+        league = kalshi_ticker[2:5]
+
+        print(f"Kalshi ticker: {kalshi_ticker}, League: {league}, Title: {kalshi_title}", flush=True)
+
+
+        # Get Kalshi team code from ticker (last 3 characters after last dash)
+        team_code = kalshi_ticker.split('-')[-1]
+        # Always store the Kalshi market row
+        yes_ask = k_market.get('yes_ask_dollars')
+        no_ask = k_market.get('no_ask_dollars')
+        ask_yes = Decimal(str(yes_ask)) if yes_ask is not None else None
+        ask_no = Decimal(str(no_ask)) if no_ask is not None else None
+        kalshi_market_stmt = insert(KalshiMarket).values(
+            ticker=kalshi_ticker, title=kalshi_title, team=team_code, yes_ask_dollars=ask_yes,
+            no_ask_dollars=ask_no, last_updated=now, league=league
+        ).on_conflict_do_update(
+            index_elements=[KalshiMarket.ticker],
+            set_={'title': kalshi_title, 'team': team_code, 'yes_ask_dollars': ask_yes,
+                  'no_ask_dollars': ask_no, 'last_updated': now, 'league': league}
+        )
+        db.execute(kalshi_market_stmt)
+        db.commit()
+        kalshi_market = db.query(KalshiMarket).filter_by(ticker=kalshi_ticker).one()
+
         match = matcher.find_polymarket_match(k_market)
         if not match or not match.get('slug'):
             continue
-
-        import requests, json
         resp = requests.get(f"https://gamma-api.polymarket.com/markets/slug/{match['slug']}")
         if resp.status_code != 200:
             continue
@@ -34,11 +65,10 @@ def fetch_and_sync_markets(db: Session):
             continue
         home_team, away_team = outcomes[0], outcomes[1]
         home_price, away_price = Decimal(str(prices[0])), Decimal(str(prices[1]))
+        # Insert or update PolymarketMarket row
         poly_market_stmt = insert(PolymarketMarket).values(
-            slug=match['slug'], title=match.get('question', ''),
-            home_team=home_team, away_team=away_team,
-            home_price=home_price, away_price=away_price,
-            last_updated=now
+            slug=match['slug'], title=match.get('question', ''), home_team=home_team, away_team=away_team,
+            home_price=home_price, away_price=away_price, last_updated=now, league=league
         ).on_conflict_do_update(
             index_elements=[PolymarketMarket.slug],
             set_={
@@ -47,53 +77,54 @@ def fetch_and_sync_markets(db: Session):
                 'away_team': away_team,
                 'home_price': home_price,
                 'away_price': away_price,
-                'last_updated': now
+                'last_updated': now,
+                'league': league
             }
         )
         db.execute(poly_market_stmt)
         db.commit()
         poly_market = db.query(PolymarketMarket).filter_by(slug=match['slug']).one()
 
-        for i, team in enumerate([home_team, away_team]):
-            yes_ask = k_market.get('yes_ask_dollars')
-            no_ask = k_market.get('no_ask_dollars')
-            ask_yes = Decimal(str(yes_ask)) if yes_ask is not None else None
-            ask_no = Decimal(str(no_ask)) if no_ask is not None else None
-            kalshi_market_stmt = insert(KalshiMarket).values(
-                ticker=kalshi_ticker + f"_{team}", title=kalshi_title, team=team,
-                yes_ask_dollars=ask_yes, no_ask_dollars=ask_no, last_updated=now
-            ).on_conflict_do_update(
-                index_elements=[KalshiMarket.ticker],
-                set_={'title': kalshi_title, 'team': team,
-                      'yes_ask_dollars': ask_yes,
-                      'no_ask_dollars': ask_no,
-                      'last_updated': now}
-            )
-            db.execute(kalshi_market_stmt)
-            db.commit()
-            kalshi_market = db.query(KalshiMarket).filter_by(ticker=kalshi_ticker + f"_{team}").one()
-            # Compute arbitrage and store best profit/direction
-            arbs = detect_arbitrage(kalshi_market, poly_market, Decimal('0.0'))
-            if arbs:
-                best_arb = max(arbs, key=lambda x: x['profit'])
-                profit = Decimal(str(best_arb['profit']))
-                direction = best_arb['type']
-            else:
-                profit = Decimal('0')
-                direction = None
-            map_stmt = insert(MarketMatchMap).values(
-                kalshi_market_id=kalshi_market.id,
-                polymarket_market_id=poly_market.id,
-                league=kalshi_ticker[2:5],
-                profit=profit,
-                direction=direction,
-                last_updated=now
-            ).on_conflict_do_update(
-                index_elements=[MarketMatchMap.kalshi_market_id, MarketMatchMap.polymarket_market_id],
-                set_={'league': kalshi_ticker[2:5],
-                      'profit': profit,
-                      'direction': direction,
-                      'last_updated': now}
-            )
-            db.execute(map_stmt)
-            db.commit()
+        # Now, pair the specific Kalshi team to the correct Polymarket outcome
+        poly_team_outcome = None
+        poly_opponent_outcome = None
+        price_yes = None
+        price_no = None
+
+
+        # Find which outcome matches this Kalshi team
+        for i, outcome in enumerate([home_team, away_team]):
+            if is_same_team(team_code, outcome, league):
+                poly_team_outcome = outcome
+                # price_yes = [home_price, away_price][i]
+                # price_no = [away_price, home_price][i] # Not useful for now
+                break
+
+        
+        if poly_team_outcome is None:
+            continue  # No valid outcome mapping
+        # Arbitrage calculation as before
+        arbs = detect_arbitrage(kalshi_market, poly_market, Decimal('0.0'))
+        if arbs:
+            best_arb = max(arbs, key=lambda x: x['profit'])
+            profit = Decimal(str(best_arb['profit']))
+            direction = best_arb['type']
+        else:
+            profit = 0
+            direction = None
+        map_stmt = insert(MarketMatchMap).values(
+            kalshi_market_id=kalshi_market.id,
+            polymarket_market_id=poly_market.id,
+            league=league,
+            profit=profit,
+            direction=direction,
+            last_updated=now
+        ).on_conflict_do_update(
+            index_elements=[MarketMatchMap.kalshi_market_id, MarketMatchMap.polymarket_market_id],
+            set_={'league': league,
+                  'profit': profit,
+                  'direction': direction,
+                  'last_updated': now}
+        )
+        db.execute(map_stmt)
+        db.commit()
