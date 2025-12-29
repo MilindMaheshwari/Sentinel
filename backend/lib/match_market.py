@@ -65,7 +65,10 @@ class MarketMatcher:
         # STEP 1: Attempt Automated Slug Match (Fast/Accurate)
         generated_slug = self._exact_match_sports_slug(ticker)
         if generated_slug:
-            print(f"DEBUG: Testing predicted slug -> {generated_slug}")
+            
+            # print(f"DEBUG: Testing predicted slug -> {generated_slug}")
+
+
             resp = requests.get(f"{POLY_SLUG_API}/{generated_slug}")
             if resp.status_code == 200:
                 data = resp.json()
@@ -77,18 +80,3 @@ class MarketMatcher:
     
 # --- RUNNING THE MATCHER ---
 matcher = MarketMatcher()
-
-# Example: NBA Test (Automatic Mapping)
-nba_test = {
-    "ticker": "KXNBAGAME-25DEC23BKNPHI",
-    "title": "Will the Philadelphia 76ers win their game against the Brooklyn Nets on Dec 23, 2025?"
-}
-
-match = matcher.find_polymarket_match(nba_test)
-
-if match:
-    print(f"\n✅ SUCCESS: Found {match.get('question')}")
-    print(f"🔗 Link: {match.get('final_url')}")
-else:
-    print("\n❌ FAILED: No match found.")
-

@@ -19,7 +19,7 @@ Base.metadata.create_all(bind=engine)
 def refresh_arbitrage(db: Session = Depends(get_db)):
     THRESHOLD = -1
     mappings = db.query(MarketMatchMap).all()
-    stale = (not mappings) or any((m.last_updated is None) or ((datetime.utcnow() - m.last_updated).total_seconds() > THRESHOLD * 60) for m in mappings)
+    stale = (not mappings) or any((m.last_updated is None) or ((datetime.now() - m.last_updated).total_seconds() > THRESHOLD * 60) for m in mappings)
     if stale:
         fetch_and_sync_and_calculate_profit(db)
         # Re-load mappings to count, after update

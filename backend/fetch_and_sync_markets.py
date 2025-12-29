@@ -5,9 +5,10 @@ from arbitrage_utils import detect_arbitrage
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 from decimal import Decimal
-import datetime
+from datetime import datetime
 import requests, json
 import logging
+from tqdm import tqdm
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger
 # Helper to resolve team string between Kalshi and Polymarket outcomes
@@ -16,7 +17,8 @@ from arbitrage_utils import is_same_team
 def fetch_and_sync_and_calculate_profit(db: Session):
     matcher = MarketMatcher()
     SERIES_TICKERS = ["KXNBAGAME", "KXNFLGAME", "KXNHLGAME", "KXMLBGAME"]
-    now = datetime.datetime.utcnow()
+    scan_start_time = datetime.now()
+    print(f"Scan started at {scan_start_time}", flush=True)
 
     all_kalshi = []
     for ticker in SERIES_TICKERS:
@@ -25,14 +27,16 @@ def fetch_and_sync_and_calculate_profit(db: Session):
 
     print(f"Found {len(all_kalshi)} Kalshi markets", flush=True)
 
-    for k_market in all_kalshi:
+    for k_market in tqdm(all_kalshi, desc="Processing Kalshi Markets"):
         kalshi_ticker = k_market.get("ticker")
         kalshi_title = k_market.get("title")
         league = kalshi_ticker[2:5]
 
-        print(f"Kalshi ticker: {kalshi_ticker}, League: {league}, Title: {kalshi_title}", flush=True)
+        # print(f"Kalshi ticker: {kalshi_ticker}, League: {league}, Title: {kalshi_title}", flush=True)
 
-
+        if k_market['status'] != 'active':
+            continue
+        
         # Get Kalshi team code from ticker (last 3 characters after last dash)
         team_code = kalshi_ticker.split('-')[-1]
         # Always store the Kalshi market row
@@ -42,11 +46,11 @@ def fetch_and_sync_and_calculate_profit(db: Session):
         ask_no = Decimal(str(no_ask)) if no_ask is not None else None
         kalshi_market_stmt = insert(KalshiMarket).values(
             ticker=kalshi_ticker, title=kalshi_title, team=team_code, yes_ask_dollars=ask_yes,
-            no_ask_dollars=ask_no, last_updated=now, league=league
+            no_ask_dollars=ask_no, last_updated=scan_start_time, league=league
         ).on_conflict_do_update(
             index_elements=[KalshiMarket.ticker],
             set_={'title': kalshi_title, 'team': team_code, 'yes_ask_dollars': ask_yes,
-                  'no_ask_dollars': ask_no, 'last_updated': now, 'league': league}
+                  'no_ask_dollars': ask_no, 'last_updated': scan_start_time, 'league': league}
         )
         db.execute(kalshi_market_stmt)
         db.commit()
@@ -68,7 +72,7 @@ def fetch_and_sync_and_calculate_profit(db: Session):
         # Insert or update PolymarketMarket row
         poly_market_stmt = insert(PolymarketMarket).values(
             slug=match['slug'], title=match.get('question', ''), home_team=home_team, away_team=away_team,
-            home_price=home_price, away_price=away_price, last_updated=now, league=league
+            home_price=home_price, away_price=away_price, last_updated=scan_start_time, league=league
         ).on_conflict_do_update(
             index_elements=[PolymarketMarket.slug],
             set_={
@@ -77,7 +81,7 @@ def fetch_and_sync_and_calculate_profit(db: Session):
                 'away_team': away_team,
                 'home_price': home_price,
                 'away_price': away_price,
-                'last_updated': now,
+                'last_updated': scan_start_time,
                 'league': league
             }
         )
@@ -118,13 +122,20 @@ def fetch_and_sync_and_calculate_profit(db: Session):
             league=league,
             profit=profit,
             direction=direction,
-            last_updated=now
+            last_updated=scan_start_time
         ).on_conflict_do_update(
             index_elements=[MarketMatchMap.kalshi_market_id, MarketMatchMap.polymarket_market_id],
             set_={'league': league,
                   'profit': profit,
                   'direction': direction,
-                  'last_updated': now}
+                  'last_updated': scan_start_time}
         )
         db.execute(map_stmt)
         db.commit()
+
+    
+    db.query(MarketMatchMap).filter(MarketMatchMap.last_updated < scan_start_time).delete()
+    db.query(KalshiMarket).filter(KalshiMarket.last_updated < scan_start_time).delete()
+    db.query(PolymarketMarket).filter(PolymarketMarket.last_updated < scan_start_time).delete()
+    db.commit()
+    print("Filtering complete! Remaining matched markets:", db.query(MarketMatchMap).count())

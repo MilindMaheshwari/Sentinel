@@ -16,12 +16,12 @@ export async function fetchOpportunities(minProfit = 0.001): Promise<Opportunity
     ticker: `${item.kalshi_ticker} / ${item.polymarket_slug}`,
     price: item.profit ? `$${item.profit.toFixed(4)}` : "-",
     profit: item.profit !== undefined && item.profit !== null ? `${(100 * item.profit).toFixed(2)}%` : "-",
-    actionUrl: item.direction === "kalshi_to_poly"
-      ? `https://polymarket.com/markets/${item.polymarket_slug}`
-      : `https://kalshi.com/markets/${item.kalshi_ticker}`,
+    direction: item.direction,
+    polymarketURL: `https://polymarket.com/markets/${item.polymarket_slug}`,
+    kalshiURL: `https://kalshi.com/markets/kx${item.league}game/${item.league}-game/${item.kalshi_ticker.slice(-4)}`.toLowerCase(),
     original: item,
   })) as Opportunity[];
-}
+} 
 
 // Trigger backend data refresh; returns true if refreshed
 export async function refreshArbitrage(): Promise<boolean> {
